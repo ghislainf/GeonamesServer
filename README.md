@@ -4,7 +4,7 @@ GeonamesServer
 Introduction
 ------------
 
-GeonamesServer is ZF2 module. It indexes [geonames data](http://www.geonames.org/) &amp; provides a search API using [Elasticsearch](http://www.elasticsearch.org/).  
+GeonamesServer is [ZF2 module](http://framework.zend.com/). It indexes [geonames data](http://www.geonames.org/) &amp; provides a search API using [Elasticsearch](http://www.elasticsearch.org/).  
 [Elasticsearch](http://www.elasticsearch.org/) is a distributed, RESTful, open source search server based on [Apache Lucene](http://lucene.apache.org/).
 
 ### Elasticsearch index mapping
