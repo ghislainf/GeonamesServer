@@ -100,35 +100,41 @@ class Installer
             $cacheKey = self::CACHE_KEY_ALTERNATE_NAMES . (int)$this->translateName;
 
             if (!$this->alternateNames = $cache->getItem($cacheKey)) {
-                $file = $this->dataLocalPath . DS . substr(self::ALTERNATE_NAMES_FILE, 0, strpos(self::ALTERNATE_NAMES_FILE, '.')) . '.txt';
-                $fp = fopen($file, 'r');
+                $files[] = $this->dataLocalPath . DS . substr(self::ALTERNATE_NAMES_FILE, 0, strpos(self::ALTERNATE_NAMES_FILE, '.')) . '.txt';
+                $files[] = $this->dataLocalPath . DS . 'customAlternateNames.txt';
 
-                // Build array alternateNames
-                $line = null;
-                $langs = null;
-                while (!feof($fp)) {
-                    $line = explode("\t", fgets($fp));
-                    $line = array_map('trim', $line);
-                    $langs = array();
+                foreach ($files as $file) {
+                    if (file_exists($file)) {
+                        $fp = fopen($file, 'r');
 
-                    if (count($line) > 6) {
-                        if ($line[2] == 'post') {
-                            if ($line[4] == 1 || empty($this->alternateNames[$line[1]]['zipcode'])) {
-                                $this->alternateNames[$line[1]]['zipcode'] = $line[3];
+                        // Build array alternateNames
+                        $line = null;
+                        $langs = null;
+                        while (!feof($fp)) {
+                            $line = explode("\t", fgets($fp));
+                            $line = array_map('trim', $line);
+                            $langs = array();
+
+                            if (count($line) > 6) {
+                                if ($line[2] == 'post') {
+                                    if ($line[4] == 1 || empty($this->alternateNames[$line[1]]['zipcode'])) {
+                                        $this->alternateNames[$line[1]]['zipcode'] = $line[3];
+                                    }
+                                } elseif (empty($line[2]) && $line[4]) {
+                                    $this->alternateNames[$line[1]]['name'] = $line[3];
+                                } elseif ($this->translateName
+                                          && preg_match('(^[a-z]{2}$)', $line[2])
+                                          && !in_array($line[2], $langs)
+                                          && $line[4] == 1
+                                ) {
+                                    $this->alternateNames[$line[1]]['langs'][$line[2]] = $line[3];
+                                    $langs[] = $line[2];
+                                }
                             }
-                        } elseif (empty($line[2]) && $line[4]) {
-                            $this->alternateNames[$line[1]]['name'] = $line[3];
-                        } elseif ($this->translateName
-                                  && preg_match('(^[a-z]{2}$)', $line[2])
-                                  && !in_array($line[2], $langs)
-                                  && $line[4] == 1
-                        ) {
-                            $this->alternateNames[$line[1]]['langs'][$line[2]] = $line[3];
-                            $langs[] = $line[2];
                         }
+                        fclose($fp);
                     }
                 }
-                fclose($fp);
                 $cache->setItem($cacheKey, $this->alternateNames);
             }
         }
@@ -425,28 +431,4 @@ class Installer
         }
         return rmdir($dir);
     }
-
-    public function writeCustomAlternateNames() {
-        $path = $this->dataLocalPath . DS . 'customAlternateNames.txt';
-        $elasticsearch = $this->sm->get('GeonamesServer\Service\Elasticsearch');
-        $indexes = $elasticsearch->getAdmin2();
-
-        if (file_exists($path)) {
-            $fp = fopen($path, 'a');
-            foreach ($indexes as &$index) {
-                fwrite($fp, implode("\t", array(
-                    'alternateNameId' => '#',
-                    'geonameid'       => $index->fields->geonameid,
-                    'isolanguage'     => '',
-                    'alternate name'  => str_replace('Département ', '', $index->fields->name),
-                    'isPreferredName' => '1',
-                    'isShortName'     => '',
-                    'isColloquial'    => '',
-                    'isHistoric'      => ''
-                )));
-            }
-        }
-
-    }
-
 }

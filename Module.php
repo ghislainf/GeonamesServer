@@ -52,7 +52,6 @@ class Module implements ConsoleBannerProviderInterface
     public function getConsoleUsage(Console $console)
     {
         return array(
-            'geonames_status'  => 'Test your PHP envrionement',
             'geonames_install' => 'Downloads geonames files and create CatalogSearch indexes',
         );
     }

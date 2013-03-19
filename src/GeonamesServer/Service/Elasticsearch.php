@@ -8,11 +8,7 @@ class Elasticsearch
 {
     protected $url = null;
 
-    protected $urlQuery = null;
-
-    protected $urlParams = array();
-
-    protected $httpClient = null;
+    protected $config = array();
 
     /**
      * Constructor
@@ -29,13 +25,17 @@ class Elasticsearch
         }
 
         // Set attributes with config
-        $this->url = http_build_url($config);
-        $this->urlQuery = $this->url . implode('/', array($config['type'], $config['index'])) . '/';
-        $this->urlParams = $config;
-        $this->httpClient = new Client();
+        $this->url = sprintf(http_build_url($config) . '%s/%s/', $config['type'], $config['index']);
+        $this->config = $config;
+    }
 
-        // Test if elasticsearch is ready with current config
-        $curl = curl_init($this->url);
+    /**
+     * Test if elasticsearch is ready with current config
+     * @throws \RuntimeException
+     */
+    public function testService()
+    {
+        $curl = curl_init(http_build_url($this->config));
         curl_setopt($curl, CURLOPT_NOBODY, true);
         $result = curl_exec($curl);
         if ($result !== false) {
@@ -45,77 +45,70 @@ class Elasticsearch
             }
         }
         curl_close($curl);
+        return true;
     }
 
+
+    /**
+     * Send request elasticsearch like this :
+     * curl -X{$httpMethod} http://host/type/index/{$elasticMethod} -d '{json_decode($content)}'
+     * @param int $httpMethod
+     * @param string $elasticMethod
+     * @param string $content
+     *
+     * @return Stdlib\ResponseInterface
+     */
+    public function sendRequest($httpMethod = Request::METHOD_GET, $elasticMethod = null, $content = null)
+    {
+        $request = new Request();
+        $request->setUri($this->url . $elasticMethod)
+                ->setMethod($httpMethod)
+                ->setContent($content);
+
+        $client = new Client();
+        return $client->dispatch($request);
+    }
+
+    /**
+     * Add city to index
+     * @param array $data
+     */
     public function addCity($data)
     {
-
-
-        $request = new Request();
-        $request->setUri($this->urlQuery . $data['geonameid'])
-                ->setMethod(Request::METHOD_PUT)
-                ->setContent(json_encode($data));
-
-        $this->httpClient->dispatch($request);
+        $this->sendRequest(Request::METHOD_PUT, $data['geonameid'], json_encode($data));
     }
 
+    /**
+     * Delete index
+     */
     public function deleteAll()
     {
-        $request = new Request();
-        $request->setUri($this->urlQuery)
-                ->setMethod(Request::METHOD_DELETE);
-
-        $this->httpClient->dispatch($request);
+        $this->sendRequest(Request::METHOD_DELETE);
     }
 
-    public function globalSearch($string, $from = 0)
+    /**
+     * Fulltext search town (use fields name and zipcode)
+     * @param string $string
+     * @param int $from
+     * @return array
+     */
+    public function search($string, $page = 1, $limit = 10)
     {
-        $query = array(
-            'from' => $from,
-            'query' => array(
-                'flt' => array(
-                    'fields' => array('name', 'zipcode'),
-                    'like_text'  => $string,
-                    'max_query_terms' => 12
-                )
-            )
-        );
+        $string = str_replace('"', '', $string);
+        $response = $this->sendRequest(Request::METHOD_POST, '_search', '{
+            "from": '.--$page.',
+            "size": '.$limit.',
+            "query": {
+                "flt": {
+                    "fields": ["name", "zipcode"],
+                    "like_text": "'.$string.'",
+                    "max_query_terms" : 12
+                }
+            }
+        }');
 
-        $request = new Request();
-        $request->setUri($this->urlQuery . '_search')
-                ->setMethod(Request::METHOD_POST)
-                ->setContent(json_encode($query));
-
-        $response = $this->httpClient->dispatch($request);
         if ($response->isSuccess()) {
             return $response->getContent();
-        }
-
-        return false;
-    }
-
-    public function getAdmin2()
-    {
-        $query = array(
-            'size' => 96,
-            'fields' => array('geonameid', 'name'),
-            'query' => array(
-                'field' => array(
-                    'type' => 'ADM2'
-                )
-            )
-        );
-
-        $request = new Request();
-        $request->setUri($this->urlQuery . '_search')
-                ->setMethod(Request::METHOD_POST)
-                ->setContent(json_encode($query));
-
-        $response = $this->httpClient->dispatch($request);
-
-        if ($response->isSuccess()) {
-            $_response = json_decode($response->getContent());
-            return $_response->hits->hits;
         }
 
         return false;

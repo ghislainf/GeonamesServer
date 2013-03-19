@@ -20,15 +20,6 @@ return array(
     'console' => array(
         'router' => array(
             'routes' => array(
-                'geonames_status' => array(
-                    'options' => array(
-                        'route'    => 'geonames_status',
-                        'defaults' => array(
-                            'controller' => 'GeonamesServer\Controller\Console',
-                            'action'     => 'status'
-                        )
-                    )
-                ),
                 'geonames_install' => array(
                     'options' => array(
                         'route'    => 'geonames_install',

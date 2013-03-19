@@ -7,35 +7,11 @@ use Zend\Console\ColorInterface;
 
 class ConsoleController extends AbstractActionController
 {
-    public function statusAction()
-    {
-        $console = $this->getServiceLocator()->get('console');
-        if (!$console instanceof Console) {
-            throw new RuntimeException('Cannot obtain console adapter. Are we running in a console ?');
-        }
-
-        echo "+----------------------------------------------------+\n" .
-             "|             Test your PHP envivronement            |\n" .
-             "+----------------------------------------------------+\n";
-
-        // Run test and show results
-        if ($this->showResultTest('Current PHP version >= 5.3   ', version_compare(PHP_VERSION, '5.3.0') >= 0, $console)
-            && $this->showResultTest('PHP extension "zip" loaded   ', extension_loaded('zip'), $console)
-            && $this->showResultTest('PHP extension "curl" loaded  ', extension_loaded('curl'), $console)
-            && $this->showResultTest('PHP extension "http" loaded  ', extension_loaded('http'), $console)
-        ) {
-            $console->write("\n[OK] ", ColorInterface::GREEN);
-            $console->write("Your environment is available\n\n");
-        } else {
-            $console->write("\n[NOT OK] ", ColorInterface::RED);
-            $console->write("Your environment is not available\n\n");
-        }
-    }
-
     public function installAction()
     {
         $timer = time();
         $installer = $this->getServiceLocator()->get('GeonamesServer\Service\Installer');
+        $elasticsearch = $this->getServiceLocator()->get('GeonamesServer\Service\Elasticsearch');
         $zip = new \ZipArchive;
 
         // Get console
@@ -48,7 +24,19 @@ class ConsoleController extends AbstractActionController
              "|             Run install GeonameServer              |\n" .
              "+----------------------------------------------------+\n";
 
-        $installer->writeCustomAlternateNames(); die;
+        // Run test and show results
+        $console->write("Test your environment : \n");
+        if ($this->showResultTest('    PHP extension "zip" loaded   ', extension_loaded('zip'), $console)
+         && $this->showResultTest('    PHP extension "curl" loaded  ', extension_loaded('curl'), $console)
+         && $this->showResultTest('    PHP extension "http" loaded  ', extension_loaded('http'), $console)
+         && $this->showResultTest('    Elasticsearch connection     ', $elasticsearch->testService(), $console)
+        ) {
+            $console->write("==> Your environment are ready\n\n");
+        } else {
+            $console->write("\n[NOT OK] ", ColorInterface::RED);
+            $console->write("Your environment is not available\n\n");
+            exit();
+        }
 
         $urls = $installer->getUrlDownloadFiles();
         $localPath = $installer->getDataLocalPath();
@@ -91,7 +79,7 @@ class ConsoleController extends AbstractActionController
         ));
 
         // Caching AlternateName
-        $console->write("Caching geonames AlternateName ...");
+        $console->write("\nCaching geonames AlternateName ...");
         $installer->getAlternateNames();
         $console->write("[OK]\n", ColorInterface::GREEN);
 
@@ -126,6 +114,10 @@ class ConsoleController extends AbstractActionController
         return $bool;
     }
 
+    /**
+     * Deletes files and test if existe before
+     * @param type $filesPath
+     */
     protected function deleteFiles($filesPath)
     {
         foreach ($filesPath as &$files) {
