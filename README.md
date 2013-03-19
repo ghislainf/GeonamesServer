@@ -46,7 +46,7 @@ Installation module
 
  * Add module in your ZF2 project
  * Install Elasticsearch
- * Edit elasticsearch and installer config in `config/module.config.php`
+ * Edit elasticsearch and installer config in `config/module.config.php`, let yourself be guided by the comments
  * Run install :
 
 ```shell
