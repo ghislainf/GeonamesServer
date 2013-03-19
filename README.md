@@ -53,4 +53,4 @@ Installation module
 $ php public/index.php geonames_install
 ```
 
-![Install process](http://dl.dropbox.com/u/6242254/install.png)
+![Install process](http://dl.dropbox.com/u/6242254/install.jpg)
