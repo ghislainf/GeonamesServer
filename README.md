@@ -41,7 +41,7 @@ GeonamesServer is ZF2 module. It indexes [geonames data](http://www.geonames.org
 }
 ```
 
-Installation module
+Module installation
 ------------
 
  * Add module in your ZF2 project
