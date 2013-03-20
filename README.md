@@ -62,7 +62,7 @@ GET `/geonames/_search/{string_query}`
 GET `/geonames/_search/{string_query}/{page}`   
 GET `/geonames/_search/{string_query}/{page}/{size}`
 
-`{page}` and `{size}` are optionnel, by default `{page} = 1` and `{size} = 10`
+`{page}` and `{size}` are optionnal, by default `{page} = 1` and `{size} = 10`
 
 ### Get document :
 `/geonames/_get/{geonameid}`   
