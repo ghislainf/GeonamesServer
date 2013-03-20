@@ -3,6 +3,7 @@ namespace GeonamesServer\Service;
 
 use Zend\Http\Client;
 use Zend\Http\Request;
+use Zend\Json\Json;
 
 class Elasticsearch
 {
@@ -17,7 +18,7 @@ class Elasticsearch
     public function __construct($config)
     {
         // Test configs params exist
-        $keys = array('host', 'port', 'type', 'index');
+        $keys = array('url', 'type', 'index');
         foreach ($keys as $key) {
             if (!isset($config[$key]) || empty($config[$key])) {
                 throw new \RuntimeException('Elasticsearch config param "'.$key.'" no defined');
@@ -25,7 +26,7 @@ class Elasticsearch
         }
 
         // Set attributes with config
-        $this->url = sprintf(http_build_url($config) . '%s/%s/', $config['type'], $config['index']);
+        $this->url = sprintf('%s%s/%s/', $config['url'], $config['type'], $config['index']);
         $this->config = $config;
     }
 
@@ -35,7 +36,7 @@ class Elasticsearch
      */
     public function testService()
     {
-        $curl = curl_init(http_build_url($this->config));
+        $curl = curl_init($this->config['url']);
         curl_setopt($curl, CURLOPT_NOBODY, true);
         $result = curl_exec($curl);
         if ($result !== false) {
@@ -72,18 +73,46 @@ class Elasticsearch
     /**
      * Add city to index
      * @param array $data
+     * @return Stdlib\ResponseInterface
      */
     public function addCity($data)
     {
-        $this->sendRequest(Request::METHOD_PUT, $data['geonameid'], json_encode($data));
+        return $this->sendRequest(Request::METHOD_PUT, $data['geonameid'], json_encode($data));
     }
 
     /**
      * Delete index
+     * @return Stdlib\ResponseInterface
      */
     public function deleteAll()
     {
-        $this->sendRequest(Request::METHOD_DELETE);
+        return $this->sendRequest(Request::METHOD_DELETE);
+    }
+
+    /**
+     * Get data of ids documents
+     * @param string $geonamesIds ex : 4587 OR 4587,9087,5426
+     * @return array
+     */
+    public function getDocuments($geonamesIds)
+    {
+        $geonamesIds = explode(',', $geonamesIds);
+        $response = $this->sendRequest(Request::METHOD_POST, '_mget', '{
+            "ids": '.json_encode($geonamesIds).'
+        }');
+
+        $json = array('success' => $response->isSuccess());
+        if ($json['success']) {
+            $content = Json::decode($response->getContent(), Json::TYPE_ARRAY);
+            if ($content['docs'][0]['exists']) {
+                foreach($content['docs'] as &$doc) {
+                    $json['response'][$doc['_source']['geonameid']] = $doc['_source'];
+                }
+            }
+            else $json['success'] = false;
+        }
+
+        return $json;
     }
 
     /**
@@ -107,10 +136,16 @@ class Elasticsearch
             }
         }');
 
-        if ($response->isSuccess()) {
-            return $response->getContent();
+        $json = array('success' => $response->isSuccess());
+        if ($json['success']) {
+            $content = Json::decode($response->getContent(), Json::TYPE_ARRAY);
+            $json['response'] = &$content['hits'];
+
+            foreach($json['response']['hits'] as &$hit) {
+                $hit = $hit['_source'];
+            }
         }
 
-        return false;
+        return $json;
     }
 }

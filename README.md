@@ -4,7 +4,7 @@ GeonamesServer
 Introduction
 ------------
 
-GeonamesServer is [ZF2](http://framework.zend.com/) module. It indexes [geonames data](http://www.geonames.org/) &amp; provides a search API using [Elasticsearch](http://www.elasticsearch.org/).  
+GeonamesServer is [ZF2](http://framework.zend.com/) module. It indexes [geonames data](http://www.geonames.org/) &amp; provides a search API using [Elasticsearch](http://www.elasticsearch.org/).
 [Elasticsearch](http://www.elasticsearch.org/) is a distributed, RESTful, open source search server based on [Apache Lucene](http://lucene.apache.org/).
 
 ### Elasticsearch index mapping
@@ -54,3 +54,17 @@ $ php public/index.php geonames_install
 ```
 
 ![Install process](http://dl.dropbox.com/u/6242254/install.jpg)
+
+## Use API
+
+### Search :
+GET `/geonames/_search/{string_query}`
+GET `/geonames/_search/{string_query}/{page}`
+GET `/geonames/_search/{string_query}/{page}/{size}`
+
+{page} and {size} are optionnel, by default `{page} = 1` and `{size} = 10`
+
+### Get document
+`/geonames/_get/{geonameid}`
+`/geonames/_get/{geonameid},{geonameid},..`
+>>>>>>> API http
