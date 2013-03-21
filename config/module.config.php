@@ -10,6 +10,9 @@ return array(
         'countries' => 'all',
         'translateName' => false
     ),
+    'demo' => array(
+        'enable' => true
+    ),
     'controllers' => array(
         'invokables' => array(
             'GeonamesServer\Controller\Console'=> 'GeonamesServer\Controller\ConsoleController',
@@ -84,5 +87,5 @@ return array(
                 )
             )
         )
-    ),
+    )
 );
