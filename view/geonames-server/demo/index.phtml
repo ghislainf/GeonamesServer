@@ -34,7 +34,7 @@
                 <div class="result">
                     <h3>JSON Result :</h3>
                     <p>
-                        Url call : <span class="badge badge-info">/geonames/_search/<strong class="query">Paris</strong>/1/10</span> |
+                        Url call : <a target="_blank" class="url"></a> |
                         Total result : <span class="badge badge-info"><strong class="total">90</strong></span> |
                         Time : <span class="badge badge-info"><strong class="time">90</strong>ms</span>
                     </p>
@@ -57,7 +57,8 @@
                     $.getJSON(url, function(json){
                         jsonString = syntaxHighlight(JSON.stringify(json, undefined, 4));
                         $('pre').html(jsonString);
-                        $('.query').html(query);
+                        $('.url').html(url);
+                        $('.url').attr('href', url);
                         $('.total').html(json.response.total);
                         $('.time').html(new Date().getTime()-ajaxTime);
                         $('.loading').hide();
