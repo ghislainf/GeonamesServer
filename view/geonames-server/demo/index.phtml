@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>GeonamesServer Demo</title>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <style>
+        .row {width:940px;margin:20px auto}
+        #location {width:92%;height:45px;font-size:22px}
+        #submit_search {width:54px;height:54px}#search{margin-top:25px}
+        .result {display:none}
+        .loading {display:none;text-align:center}
+        .loading span {padding:19px;font-size:19px}
+        .string {color: #d14;}
+        .number {color: #009999;}
+        .boolean {color: blue;}
+        .null {color: magenta;}
+        .key {color: #d14;}
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="span9">
+                <h1>GeonamesServer simple demo</h1>
+                <p>
+                    Countries indexed : <span class="badge badge-info">France</span> | Totals documents : <span class="badge badge-info"><?php echo number_format($count, 0, ',', ' '); ?></span>
+                </p>
+                <form id="search">
+                    <button type="submit" id="submit_search" class="pull-right btn"><i class="icon-search"></i></button>
+                    <input type="text" name="location" id="location" placeholder="Search countries, regions, cities, zipcode, ..." autocomplete="off">
+                </form>
+                <div class="loading"><span class="badge badge-success">Loading...</span></div>
+                <div class="result">
+                    <h3>JSON Result :</h3>
+                    <p>
+                        Url call : <span class="badge badge-info">/geonames/_search/<strong class="query">Paris</strong>/1/10</span> |
+                        Total result : <span class="badge badge-info"><strong class="total">90</strong></span> |
+                        Time : <span class="badge badge-info"><strong class="time">90</strong>ms</span>
+                    </p>
+                    <pre></pre>
+                </div>
+        </div>
+    </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#search').submit(function() {
+                var query = $('#location').val();
+
+                if (query.length > 2) {
+                    $('.result').hide();
+                    $('.loading').show();
+                    var url = '/geonames/_search/'+query+'/1/10';
+                    var ajaxTime= new Date().getTime();
+
+                    $.getJSON(url, function(json){
+                        jsonString = syntaxHighlight(JSON.stringify(json, undefined, 4));
+                        $('pre').html(jsonString);
+                        $('.query').html(query);
+                        $('.total').html(json.response.total);
+                        $('.time').html(new Date().getTime()-ajaxTime);
+                        $('.loading').hide();
+                        $('.result').show();
+                    });
+
+                }
+                else alert('Your search must be at least 3 characters.');
+                return false;
+             });
+        });
+
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+    </script>
+</body>

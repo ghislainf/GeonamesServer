@@ -116,6 +116,20 @@ class Elasticsearch
     }
 
     /**
+     * Count documents indexed
+     * @return int
+     */
+    public function countDocuments()
+    {
+        $response = $this->sendRequest(Request::METHOD_GET, '_count');
+        if ($response->isSuccess()) {
+            $content = Json::decode($response->getContent(), Json::TYPE_ARRAY);
+            return $content['count'];
+        }
+        return 0;
+    }
+
+    /**
      * Fulltext search town (use fields name and zipcode)
      * @param string $string
      * @param int $from
