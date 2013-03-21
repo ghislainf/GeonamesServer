@@ -9,7 +9,7 @@ GeonamesServer is [ZF2](http://framework.zend.com/) module. It indexes [geonames
 
 
 ### Simple demo
-!(Simple demo)[http://dl.dropbox.com/u/6242254/demo.png]
+![Simple demo](http://dl.dropbox.com/u/6242254/demo.png)
 
 A demo is available [here](http://demogeonames.websquare.fr/geonames)
 
