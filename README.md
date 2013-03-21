@@ -9,9 +9,8 @@ GeonamesServer is [ZF2](http://framework.zend.com/) module. It indexes [geonames
 
 
 ## Simple demo
-![simple demo](http://dl.dropbox.com/u/6242254/demo2.png)   
-A demo is available [here](http://demogeonames.websquare.fr/geonames)
 
+| A demo is available [here](http://demogeonames.websquare.fr/geonames)  | ![simple demo](http://dl.dropbox.com/u/6242254/demo2.png) |
 
 
 ## Elasticsearch index mapping
