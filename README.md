@@ -71,5 +71,5 @@ GET `/geonames/_search/{string_query}/{page}/{size}`
 `{page}` and `{size}` are optionnal, by default `{page} = 1` and `{size} = 10`
 
 ### Get document :
-`/geonames/_get/{geonameid}`   
-`/geonames/_get/{geonameid},{geonameid},..`
+GET `/geonames/_get/{geonameid}`   
+GET `/geonames/_get/{geonameid},{geonameid},..`
