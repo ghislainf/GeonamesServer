@@ -7,7 +7,7 @@ return array(
     ),
     'installer' => array(
         'dataLocalPath'  => 'data/geonamesServer',
-        'countries' => 'FR',
+        'countries' => 'all',
         'translateName' => false
     ),
     'controllers' => array(

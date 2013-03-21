@@ -313,8 +313,10 @@ class Installer
 
                     if ($parents = $this->getParentsCode($code, true)) {
                         foreach ($parents as $parentCode) {
-                            $parentData = $adminsCodeData[$parentCode];
-                            $data['parents'][] = $parentData;
+                            if (isset($adminsCodeData[$parentCode])) {
+                                $parentData = $adminsCodeData[$parentCode];
+                                $data['parents'][] = $parentData;
+                            }
                         }
                     }
 
@@ -398,6 +400,9 @@ class Installer
     {
         $name = basename($url);
         $error = !preg_match('(^[A-Z]{2}.zip$)', $name);
+        if ($url != self::ALL_COUNTRY_FILE) {
+            return true;
+        }
 
         if ($error === false) {
             $curl = curl_init($url);
