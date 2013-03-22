@@ -132,7 +132,8 @@ class Elasticsearch
     /**
      * Fulltext search town (use fields name and zipcode)
      * @param string $string
-     * @param int $from
+     * @param int $page
+     * @param int $limit
      * @return array
      */
     public function search($string, $page = 1, $limit = 10)
