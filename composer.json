@@ -1,0 +1,32 @@
+{
+    "name": "ghislainf/geonames-server",
+    "description": "ZF2 module, index geonames data & search API",
+    "version": "1.0.0",
+    "type": "module",
+    "license": "MIT",
+    "tags": [
+        "zend framework",
+        "zf2",
+        "geonames",
+        "module"
+    ],
+    "homepage": "https://github.com/ghislainf/GeonamesServer",
+    "authors": [
+        {
+            "name": "Ghislain de Fontenay",
+            "email": "ghislain.de.fontenay@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "2.*"
+    },
+    "autoload": {
+    	"psr-0": {
+            "GeonamesServer": "src/"
+    	},
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}
