@@ -70,7 +70,7 @@ A demo is available [here](http://demogeonames.websquare.fr/geonames).
      ```
   6. Copy `config/geonamesserver.local.php` in `my/project/directory/config/autoload`
   7. Edit `my/project/directory/config/autoload/geonamesserver.local.php`, let yourself guided by comments.
-  8. Run install :
+  8. Import geonames data in your elasticsearch index :
 
      ```shell
      $ php public/index.php geonames_install
