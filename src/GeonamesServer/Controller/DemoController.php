@@ -12,7 +12,7 @@ class DemoController extends AbstractActionController
     public function indexAction()
     {
         $config = $this->getServiceLocator()->get('config');
-        if (!isset($config['demo']['enable']) || !$config['demo']['enable']) {
+        if (!isset($config['geonames_server']['demo']['enable']) || !$config['geonames_server']['demo']['enable']) {
             $this->getResponse()->setStatusCode(404);
             return;
         }

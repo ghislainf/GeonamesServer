@@ -3,11 +3,11 @@ return array(
     'factories' => array(
         'GeonamesServer\Service\Installer' => function($sm) {
             $config = $sm->get('config');
-            return new GeonamesServer\Service\Installer($config['installer'], $sm);
+            return new GeonamesServer\Service\Installer($config['geonames_server']['installer'], $sm);
         },
         'GeonamesServer\Service\Elasticsearch' => function($sm) {
             $config = $sm->get('config');
-            return new GeonamesServer\Service\Elasticsearch($config['elasticsearch']);
+            return new GeonamesServer\Service\Elasticsearch($config['geonames_server']['elasticsearch']);
         },
         'geonamesCache' => function ($sm) {
             return Zend\Cache\StorageFactory::factory(array(

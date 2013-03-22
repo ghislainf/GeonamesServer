@@ -1,17 +1,10 @@
 <?php
 return array(
-    'elasticsearch' => array(
-        'url'   => 'http://localhost:9200/',
-        'type'  => 'geonames',
-        'index' => 'cities'
-    ),
-    'installer' => array(
-        'dataLocalPath'  => 'data/geonamesServer',
-        'countries' => 'all',
-        'translateName' => false
-    ),
-    'demo' => array(
-        'enable' => true
+    'geonames_server' => array(
+        'installer' => array(
+            'dataLocalPath'  => 'data/geonamesServer',
+            'translateName' => false
+        )
     ),
     'controllers' => array(
         'invokables' => array(
