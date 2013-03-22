@@ -55,7 +55,7 @@
                     var ajaxTime= new Date().getTime();
 
                     $.getJSON(url, function(json){
-                        jsonString = syntaxHighlight(JSON.stringify(json, undefined, 4));
+                        var jsonString = syntaxHighlight(JSON.stringify(json, undefined, 4));
                         $('pre').html(jsonString);
                         $('.url').html(url);
                         $('.url').attr('href', url);

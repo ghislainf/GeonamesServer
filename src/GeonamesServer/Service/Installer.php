@@ -11,7 +11,7 @@ class Installer
     const CACHE_KEY_ALTERNATE_NAMES = 'alternate_names';
 
     /**
-     * Coutries load
+     * Countries load
      * @var array|string $countries
      *      "FR" or array("FR", "US")
      */
@@ -168,14 +168,14 @@ class Installer
     }
 
     /**
-     * Sort coutries files in ranked file
+     * Sort countries files in ranked file
      * @return string Ranked filename
      */
     public function getRankedFilename()
     {
         $splitDirectory = $this->getDataLocalPath() . DS . substr(md5(implode('', $this->countries)), 0, 12);
 
-        // Test if couties files alread sort
+        // Test if countries files already sort
         if (file_exists($this->rankedFilename = $this->dataLocalPath . DS . basename($splitDirectory) . '.txt')) {
             return $this->rankedFilename;
         }
@@ -216,11 +216,11 @@ class Installer
 
         // Assemble split files in correct order
         $item = 0; $fp = null;
-        $coutriesFile = $splitDirectory . DS . 'countries.txt';
+        $countriesFile = $splitDirectory . DS . 'countries.txt';
         foreach ($writers as $key => &$writer) {
             if (++$item == 1) {
                 fclose($writer);
-                $fp = fopen($coutriesFile, 'a');
+                $fp = fopen($countriesFile, 'a');
             } else {
                 rewind($writer);
                 while (!feof($writer)) {
@@ -233,7 +233,7 @@ class Installer
         fclose($fp);
 
         // Delete folder split files
-        rename($coutriesFile, $this->rankedFilename);
+        rename($countriesFile, $this->rankedFilename);
         $this->rrmdir($splitDirectory);
 
         return $this->rankedFilename;
@@ -329,12 +329,12 @@ class Installer
 
     /**
      * Download remote file
-     * @param string $romoteUrl
+     * @param string $remoteUrl
      * @param string $localPath
      */
-    public function downloadRemoteFile($romoteUrl, $localPath)
+    public function downloadRemoteFile($remoteUrl, $localPath)
     {
-        $ch = curl_init($romoteUrl);
+        $ch = curl_init($remoteUrl);
         $fp = fopen($localPath, 'w');
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -418,13 +418,14 @@ class Installer
         }
 
         if ($error) {
-            throw new \RuntimeException('Country "'.substr($name, 0, strpos($name, '.')).'" no available, you can see all coutries here : ' . self::GEONAMES_DUMP_URL);
+            throw new \RuntimeException('Country "'.substr($name, 0, strpos($name, '.')).'" no available, you can see all countries here : ' . self::GEONAMES_DUMP_URL);
         }
     }
 
     /**
      * Recursively remove a directory
      * @param string $dir
+     * @return bool true on success or false on failure.
      */
     protected function rrmdir($dir)
     {

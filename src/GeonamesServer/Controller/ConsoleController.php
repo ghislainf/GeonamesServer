@@ -84,7 +84,7 @@ class ConsoleController extends AbstractActionController
         $console->write("[OK]\n", ColorInterface::GREEN);
 
         // Generate ranked file
-        $console->write("Sort coutries files for optimize indexing ... ");
+        $console->write("Sort countries files for optimize indexing ... ");
         $installer->getRankedFilename();
         $console->write("[OK]\n", ColorInterface::GREEN);
 
@@ -115,8 +115,8 @@ class ConsoleController extends AbstractActionController
     }
 
     /**
-     * Deletes files and test if existe before
-     * @param type $filesPath
+     * Deletes files and test if exist before
+     * @param array $filesPath
      */
     protected function deleteFiles($filesPath)
     {
