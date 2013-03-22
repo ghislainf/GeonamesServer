@@ -1,6 +1,6 @@
 {
     "name": "ghislainf/geonames-server",
-    "description": "ZF2 module, index geonames data & search API",
+    "description": "ZF2 module, index geonames data & provides a search API using Elasticsearch",
     "version": "1.0.0",
     "type": "module",
     "license": "MIT",
@@ -8,6 +8,7 @@
         "zend framework",
         "zf2",
         "geonames",
+        "elasticsearch",
         "module"
     ],
     "homepage": "https://github.com/ghislainf/GeonamesServer",
