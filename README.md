@@ -73,3 +73,6 @@ GET `/geonames/_search/{string_query}/{page}/{size}`
 ### Get document :
 GET `/geonames/_get/{geonameid}`   
 GET `/geonames/_get/{geonameid},{geonameid},..`
+
+## Composer package
+[Packagist Url](https://packagist.org/packages/ghislainf/geonames-server)
