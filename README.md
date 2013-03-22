@@ -52,7 +52,7 @@ Module installation
 
  * Add module in your ZF2 project
  * Install Elasticsearch
- * Edit elasticsearch and installer config in `config/module.config.php`, let yourself guided by comments
+ * Add & edit `config/geonamesserver.local.php` in `config/autoload`, let yourself guided by comments.
  * Run install :
 
 ```shell
