@@ -48,19 +48,35 @@ A demo is available [here](http://demogeonames.websquare.fr/geonames).
 }
 ```
 
-Module installation
-------------
+## Module installation
+  1. install elasticsearch
+  1. `cd my/project/directory`
+  2. create a `composer.json` file with following contents:
 
- * Add module in your ZF2 project
- * Install Elasticsearch
- * Add & edit `config/geonamesserver.local.php` in `config/autoload`, let yourself guided by comments.
- * Run install :
+     ```json
+     {
+         "require": {
+             "ghislainf/geonames-server": "dev-master"
+         }
+     }
+     ```
+  3. install composer via `curl -s http://getcomposer.org/installer | php` (on windows, download
+     http://getcomposer.org/installer and execute it with PHP)
+  4. run `php composer.phar install`
+  5. open `my/project/directory/configs/application.config.php` and add the following key to your `modules`:
 
-```shell
-$ php public/index.php geonames_install
-```
+     ```php
+     'GeonamesServer',
+     ```
+  6. Copy `config/geonamesserver.local.php` in `my/project/directory/config/autoload`
+  7. Edit `my/project/directory/config/autoload/geonamesserver.local.php`, let yourself guided by comments.
+  8. Run install :
 
-![Install process](http://dl.dropbox.com/u/6242254/install.jpg)
+     ```shell
+     $ php public/index.php geonames_install
+     ```
+
+     ![Install process](http://dl.dropbox.com/u/6242254/install.jpg)
 
 ## Use API
 
