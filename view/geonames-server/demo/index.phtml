@@ -55,12 +55,13 @@
                     var ajaxTime= new Date().getTime();
 
                     $.getJSON(url, function(json){
+                        $('.time').html(new Date().getTime()-ajaxTime);
+
                         var jsonString = syntaxHighlight(JSON.stringify(json, undefined, 4));
                         $('pre').html(jsonString);
                         $('.url').html(url);
                         $('.url').attr('href', url);
                         $('.total').html(json.response.total);
-                        $('.time').html(new Date().getTime()-ajaxTime);
                         $('.loading').hide();
                         $('.result').show();
                     });
