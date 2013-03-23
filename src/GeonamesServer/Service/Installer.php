@@ -191,8 +191,7 @@ class Installer
                 foreach ($featureCodes as $featureCode) {
                     $writers[';'.$featureCode.';'] = fopen($splitDirectory . DS . $featureCode . '.txt', 'w+');
                 }
-            }
-            else {
+            } else {
                 $writers[';'.implode(';', $featureCodes).';'] = fopen($splitDirectory . DS . $group . '.txt', 'w+');
             }
         }

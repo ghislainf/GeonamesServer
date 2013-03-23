@@ -108,8 +108,7 @@ class Elasticsearch
                 foreach($content['docs'] as &$doc) {
                     $json['response'][$doc['_source']['geonameid']] = $doc['_source'];
                 }
-            }
-            else $json['success'] = false;
+            } else $json['success'] = false;
         }
 
         return $json;
