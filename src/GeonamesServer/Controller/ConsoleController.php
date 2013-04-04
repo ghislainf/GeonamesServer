@@ -31,7 +31,7 @@ class ConsoleController extends AbstractActionController
          && $this->showResultTest('    PHP extension "http" loaded  ', extension_loaded('http'), $console)
          && $this->showResultTest('    Elasticsearch connection     ', $elasticsearch->testService(), $console)
         ) {
-            $console->write("==> Your environment are ready\n\n");
+            $console->write("==> Your environment is ready\n\n");
         } else {
             $console->write("\n[NOT OK] ", ColorInterface::RED);
             $console->write("Your environment is not available\n\n");
@@ -48,7 +48,7 @@ class ConsoleController extends AbstractActionController
 
             // Test file exist
             if (file_exists($localPath . DS . substr($name, 0, strpos($name, '.')) . '.txt')) {
-                $console->write('    File "'.$name.'" already download, process continue ... ');
+                $console->write('    File "'.$name.'" already downloaded, process continue ... ');
                 $console->write("[OK]\n", ColorInterface::GREEN);
                 continue;
             }
