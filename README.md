@@ -9,10 +9,6 @@ GeonamesServer is [ZF2](http://framework.zend.com/) module. It indexes [geonames
 
 → [Composer package](https://packagist.org/packages/ghislainf/geonames-server)
 
-## Simple demo
-
-A demo is available [here](http://demo.ghislainf.me/geonames).
-
 
 ## Elasticsearch index mapping
 ```javascript
