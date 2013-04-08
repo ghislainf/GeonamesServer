@@ -239,7 +239,7 @@ class Installer
     }
 
     /**
-     * Import data in elasticsearcg index
+     * Import data in elasticsearch index
      */
     public function importData()
     {
