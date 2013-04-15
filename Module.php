@@ -30,11 +30,9 @@ class Module implements ConsoleBannerProviderInterface
     public function getAutoloaderConfig()
     {
         return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
+            'Zend\Loader\ClassMapAutoloader' => array(
+                __DIR__.DIRECTORY_SEPARATOR.'autoload_classmap.php'
+            )
         );
     }
 
