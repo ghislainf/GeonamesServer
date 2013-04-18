@@ -44,18 +44,7 @@ class Installer
      * Geonames feature code allowed
      * @var array
      */
-    protected $featureCode = array(
-        'countries' => array(
-            'PCL', 'PCLD', 'PCLF', 'PCLI',
-            'PCLIX', 'PCLS'
-        ),
-        'admins' => array(
-            'ADM1', 'ADM2'
-        ),
-        'cities' => array(
-            'PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLX'
-        )
-    );
+    protected $featureCode = null;
 
     /**
      * Local path of geonames files
@@ -84,6 +73,7 @@ class Installer
 
         $this->translateName = $config['translateName'];
         $this->dataLocalPath = $config['dataLocalPath'];
+        $this->featureCode = $config['featureCodeAllowed'];
         $this->sm = &$sm;
     }
 
