@@ -155,8 +155,11 @@ class Elasticsearch
 
         if (!empty($this->strSearch['string'])) {
             $query['query'] = array(
-                'fuzzy' => array(
-                    'name' => $this->strSearch['string']
+                'fuzzy_like_this_field' => array(
+                    'name' => array(
+                        'like_text' => $this->strSearch['string'],
+                        'max_query_terms' => 12
+                    )
                 )
             );
 
