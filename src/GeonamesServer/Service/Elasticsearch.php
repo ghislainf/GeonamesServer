@@ -11,6 +11,8 @@ class Elasticsearch
 
     protected $config = array();
 
+    protected $strSearch = array();
+
     /**
      * Constructor
      * @param Array $config
@@ -137,19 +139,46 @@ class Elasticsearch
      */
     public function search($string, $page = 1, $limit = 10)
     {
-        $string = str_replace('"', '', $string);
-        $response = $this->sendRequest(Request::METHOD_POST, '_search', '{
-            "from": '.--$page.',
-            "size": '.$limit.',
-            "query": {
-                "flt": {
-                    "fields": ["name", "zipcode"],
-                    "like_text": "'.$string.'",
-                    "max_query_terms" : 12
-                }
-            }
-        }');
+        // Filter string search
+        $this->strSearch = array();
+        $this->strSearch['string'] = trim(preg_replace_callback(
+            '`([0-9]+)`',
+            array($this, 'filterStrSearch'),
+            $string
+        ));
 
+        // Build elasticsearch query
+        $query = array(
+            "from" => --$page,
+            "size" => $limit
+        );
+
+        if (!empty($this->strSearch['string'])) {
+            $query['query'] = array(
+                'fuzzy' => array(
+                    'name' => $this->strSearch['string']
+                )
+            );
+
+            if (isset($this->strSearch['zipcode'])) {
+                $query['query']['constant_score'] = array(
+                    'filter' => array(
+                        'prefix' => array(
+                            'zipcode' => $this->strSearch['zipcode']
+                        )
+                    )
+                );
+            }
+        } else {
+            $query['query'] = array(
+                'prefix' => array(
+                    'zipcode' => $this->strSearch['zipcode']
+                )
+            );
+        }
+
+        // Run query
+        $response = $this->sendRequest(Request::METHOD_POST, '_search', Json::encode($query));
         $json = array('success' => $response->isSuccess());
         if ($json['success']) {
             $content = Json::decode($response->getContent(), Json::TYPE_ARRAY);
@@ -161,5 +190,21 @@ class Elasticsearch
         }
 
         return $json;
+    }
+
+    /**
+     * Filter string search, callback of function preg_replace_callback
+     * @param array $matchs
+     * @return mixed
+     */
+    protected function filterStrSearch($matchs)
+    {
+        if (!isset($this->strSearch['zipcode'])
+            || (isset($this->strSearch['zipcode']) && strlen($matchs[0]) > strlen($this->strSearch['zipcode']))
+        ) {
+            $this->strSearch['zipcode'] = $matchs[0];
+        }
+
+        return null;
     }
 }
