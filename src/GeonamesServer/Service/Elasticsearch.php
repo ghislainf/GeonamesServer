@@ -200,7 +200,7 @@ class Elasticsearch
     protected function filterStrSearch($matchs)
     {
         if (!isset($this->strSearch['zipcode'])
-            || (isset($this->strSearch['zipcode']) && strlen($matchs[0]) > strlen($this->strSearch['zipcode']))
+            || strlen($matchs[0]) > strlen($this->strSearch['zipcode'])
         ) {
             $this->strSearch['zipcode'] = $matchs[0];
         }
