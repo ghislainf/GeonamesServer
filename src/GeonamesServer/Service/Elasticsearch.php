@@ -149,8 +149,9 @@ class Elasticsearch
 
         // Build elasticsearch query
         $query = array(
-            "from" => --$page,
-            "size" => $limit
+            'from'      => --$page,
+            'size'      => $limit,
+            'min_score' => 0.5
         );
 
         if (!empty($this->strSearch['string'])) {
@@ -188,6 +189,7 @@ class Elasticsearch
             $json['response'] = &$content['hits'];
 
             foreach($json['response']['hits'] as &$hit) {
+                $hit['_source']['_score'] = $hit['_score'];
                 $hit = $hit['_source'];
             }
         }
