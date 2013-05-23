@@ -53,7 +53,7 @@ GeonamesServer is [ZF2](http://framework.zend.com/) module. It indexes [geonames
      ```json
      {
          "require": {
-             "ghislainf/geonames-server": "dev-master"
+             "ghislainf/geonames-server": "v0.9"
          }
      }
      ```
