@@ -28,7 +28,6 @@ class ConsoleController extends AbstractActionController
         $console->write("Test your environment : \n");
         if ($this->showResultTest('    PHP extension "zip" loaded   ', extension_loaded('zip'), $console)
          && $this->showResultTest('    PHP extension "curl" loaded  ', extension_loaded('curl'), $console)
-         && $this->showResultTest('    PHP extension "http" loaded  ', extension_loaded('http'), $console)
          && $this->showResultTest('    Elasticsearch connection     ', $elasticsearch->testService(), $console)
         ) {
             $console->write("==> Your environment is ready\n\n");
