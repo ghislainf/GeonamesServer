@@ -151,7 +151,11 @@ class Elasticsearch
         $query = array(
             'from'      => --$page,
             'size'      => $limit,
-            'min_score' => 0.5
+            'min_score' => 0.5,
+            'sort'      => array(
+                'population' => 'desc',
+                '_score' => 'desc'
+            )
         );
 
         if (!empty($this->strSearch['string'])) {
