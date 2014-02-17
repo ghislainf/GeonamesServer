@@ -106,7 +106,7 @@ class Elasticsearch
         $json = array('success' => $response->isSuccess());
         if ($json['success']) {
             $content = Json::decode($response->getContent(), Json::TYPE_ARRAY);
-            if ($content['docs'][0]['exists']) {
+            if ($content['docs'][0]['found']) {
                 foreach($content['docs'] as &$doc) {
                     $json['response'][$doc['_source']['geonameid']] = $doc['_source'];
                 }
